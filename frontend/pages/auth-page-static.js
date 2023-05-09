@@ -5,8 +5,8 @@ function AuthPageStatic(props) {
         Auth Page Static
       </h1>
       <pre>
-          {JSON.stringify(props, null, 2)}
-        </pre>
+        {JSON.stringify(props, null, 2)}
+      </pre> 
     </div>
   )
 }

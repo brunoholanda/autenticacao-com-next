@@ -1,9 +1,10 @@
-import React from "react";
+import React from 'react';
 import { useRouter } from 'next/router';
+import { authService } from '../src/services/auth/authService';
 
 export default function HomeScreen() {
   const router = useRouter();
-  const [values, setValues] = React.useState ({
+  const [values, setValues] = React.useState({
     usuario: 'omariosouto',
     senha: 'safepassword',
   });
@@ -14,18 +15,31 @@ export default function HomeScreen() {
     setValues((currentValues) => {
       return {
         ...currentValues,
-        [fileName]: fieldValue,
-      }
+        [fieldName]: fieldValue,
+      };
     })
   }
+
   return (
     <div>
-      <h1>Login</h1> 
-      <form onSubmit={(event) =>{
+      <h1>Login</h1>
+      <form onSubmit={(event) => {
+        // onSubimit -> Controler (pega dados do usuarui e passa para um servico)
+        // authService -> Servico ()
         event.preventDefault();
-
-        //router.push('/auth-page-static')
-        router.push('/auth-page-ssr');
+        authService.login({
+          username: values.usuario,
+          password: values.senha,
+        })
+        .then(() => {
+          // router.push('/auth-page-static');
+          router.push('/auth-page-ssr');
+        })
+        .catch((err) => {
+          console.log(err)
+          alert('Usuario ou a senha estao invalidos')
+        })
+ 
       }}>
         <input
           placeholder="Usuário" name="usuario"
@@ -35,9 +49,9 @@ export default function HomeScreen() {
           placeholder="Senha" name="senha" type="password"
           value={values.senha} onChange={handleChange}
         />
-        <pre>
+        {/* <pre>
           {JSON.stringify(values, null, 2)}
-        </pre>
+        </pre> */}
         <div>
           <button>
             Entrar
